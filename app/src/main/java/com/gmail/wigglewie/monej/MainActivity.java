@@ -19,16 +19,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getParsedData();
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, ConverterFragment.newInstance(currencyList))
-                .commit();
     }
 
     private void getParsedData() {
         currencyList = new ArrayList<>();
         currencyList.add(new CurrencyRate(123, new Date(), "RUS", 23, "Russian rubles", 2.2));
         //TODO implement service
+
+        showFragmentWithLoadedData();
+    }
+
+    private void showFragmentWithLoadedData() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, ConverterFragment.newInstance(currencyList))
+                .commit();
     }
 
 }

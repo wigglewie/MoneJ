@@ -38,7 +38,6 @@ public class ConverterFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mList = (ArrayList<CurrencyRate>) getArguments().getSerializable(ARG_PARAM_LIST);
-            System.out.println();
         }
     }
 
@@ -46,7 +45,6 @@ public class ConverterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         binding = FragmentConverterBinding.inflate(inflater, container, false);
-        binding.fragmentContainerTest.setText(mList != null ? mList.get(0).abbreviation : "empty");
         return binding.getRoot();
     }
 

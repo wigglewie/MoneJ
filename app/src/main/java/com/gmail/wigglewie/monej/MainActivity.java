@@ -9,6 +9,8 @@ import com.gmail.wigglewie.monej.fragments.ConverterFragment;
 import java.util.ArrayList;
 import java.util.Date;
 
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<CurrencyRate> currencyList;
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Timber.plant(new Timber.DebugTree());
 
         getParsedData();
     }

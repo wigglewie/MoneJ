@@ -6,37 +6,102 @@
         android:layout_height="match_parent"
         tools:context=".fragments.ConverterFragment">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/editTextNumberDecimal"
+    <RelativeLayout
+            android:id="@+id/layoutCurrencyEnter1"
             android:layout_marginTop="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_border"
+                android:layout_centerVertical="true"
+                android:hint="@string/edit_text_currency_input_hint"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:layout_height="80dp"
                 android:inputType="numberDecimal"
-                android:ems="10" />
-    </com.google.android.material.textfield.TextInputLayout>
+                android:ems="10"
+                android:id="@+id/editTextCurrencyEnter1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+                android:id="@+id/iconCountry1"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_flag_eu"
+                android:layout_marginEnd="78dp"
+                android:layout_alignParentEnd="true"
+                android:scaleType="centerCrop"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+        <TextView
+                android:id="@+id/textAbbreviation1"
+                android:layout_centerVertical="true"
+                android:text="@string/abbreviation_BYN"
+                android:textSize="18sp"
+                android:layout_marginEnd="9dp"
+                android:gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_alignEnd="@+id/editTextCurrencyEnter1" />
+
+    </RelativeLayout>
 
 
-    <com.google.android.material.textfield.TextInputEditText
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editTextNumberDecimal2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="60dp"-->
+    <!--            android:id="@+id/editText_1_layout"-->
+    <!--            android:hint="asd"-->
+    <!--            android:layout_marginStart="20dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:layout_marginEnd="20dp"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:inputType="numberDecimal"-->
+    <!--                android:ems="10" />-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="60dp"-->
+    <!--            android:id="@+id/editText_2_layout"-->
+    <!--            android:layout_marginStart="20dp"-->
+    <!--            android:layout_marginEnd="20dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/editText_1_layout">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:hint="123123123"-->
+    <!--                android:background="@null"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:inputType="numberDecimal"-->
+    <!--                android:ems="10" />-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

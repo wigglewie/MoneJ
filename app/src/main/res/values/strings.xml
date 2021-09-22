@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">MoneJ</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <!--    Abbreviations-->
+    <string name="abbreviation_BYN">BYN</string>
+    <string name="abbreviation_RUS">RUS</string>
+    <string name="abbreviation_USD">USD</string>
+    <string name="abbreviation_EUR">EUR</string>
+    <!--Others-->
+    <string name="edit_text_currency_input_hint">0.0</string>
 </resources>

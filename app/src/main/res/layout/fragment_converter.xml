@@ -10,7 +10,7 @@
             android:id="@+id/layoutCurrencyEnter1"
             android:layout_marginTop="60dp"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +21,6 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:background="@drawable/edit_text_border"
                 android:layout_centerVertical="true"
@@ -60,6 +59,28 @@
                 android:layout_alignEnd="@+id/editTextCurrencyEnter1" />
 
     </RelativeLayout>
+
+    <ImageButton
+            android:src="@drawable/ic_baseline_swap_vert_48"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toBottomOf="@+id/layoutCurrencyEnter1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/btnSwapCurrencies" />
+
+    <TextView
+            android:text="1 Доллар США = 2.4 Белорусских рубря"
+            android:layout_width="wrap_content"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:id="@+id/textExchangeInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/btnSwapCurrencies"
+            app:layout_constraintTop_toTopOf="@+id/btnSwapCurrencies" />
 
 
     <!--    <com.google.android.material.textfield.TextInputLayout-->

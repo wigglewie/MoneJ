@@ -2,19 +2,20 @@ package com.gmail.wigglewie.monej.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.os.ConfigurationCompat;
 import androidx.fragment.app.Fragment;
 
-import com.gmail.wigglewie.monej.CountryCurrency;
+import com.gmail.wigglewie.monej.Currency;
 import com.gmail.wigglewie.monej.CurrencyRate;
 import com.gmail.wigglewie.monej.databinding.FragmentConverterBinding;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -26,9 +27,9 @@ public class ConverterFragment extends Fragment {
 
     private FragmentConverterBinding binding;
 
-    private CountryCurrency selectedCountryCurrency1;
+    private Currency selectedCurrency1;
 
-    private CountryCurrency selectedCountryCurrency2;
+    private Currency selectedCurrency2;
 
     public ConverterFragment() {
     }
@@ -53,11 +54,11 @@ public class ConverterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         binding = FragmentConverterBinding.inflate(inflater, container, false);
-        selectedCountryCurrency1 = CountryCurrency.BELARUS;
+        selectedCurrency1 = Currency.BELARUS;
         binding.iconCountry1.setImageDrawable(
                 AppCompatResources.getDrawable(getContext(),
-                        selectedCountryCurrency1.icon));
-        binding.textAbbreviation1.setText(selectedCountryCurrency1.abbreviation);
+                        selectedCurrency1.icon));
+        binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
 
         initField1();
 
@@ -69,21 +70,42 @@ public class ConverterFragment extends Fragment {
             AlertDialog.Builder materialAlertDialogBuilder = new AlertDialog.Builder(getContext());
             materialAlertDialogBuilder
                     .setTitle("Choose currency")
-                    .setSingleChoiceItems(CountryCurrency.getAbbreviationsArray(),
-                            selectedCountryCurrency1.index,
-                            (dialogInterface, i) -> {
-                                selectedCountryCurrency1 = CountryCurrency.findByIndex(i);
+                    .setSingleChoiceItems(Currency.getAbbreviationsArray(),
+                            selectedCurrency1.ordinal(),
+                            (dialogInterface, position) -> {
+                                selectedCurrency1 = Currency.findByIndex(position);
                                 binding.iconCountry1.setImageDrawable(
-                                        AppCompatResources.getDrawable(getContext(),
-                                                selectedCountryCurrency1.icon));
+                                        AppCompatResources
+                                                .getDrawable(getContext(),
+                                                        selectedCurrency1.icon));
                                 binding.textAbbreviation1
-                                        .setText(selectedCountryCurrency1.abbreviation);
-                                Timber.d("======SELECTED====== %s", selectedCountryCurrency1.toString());
+                                        .setText(selectedCurrency1.abbreviation);
+                                updateTextExchangeInfo();
+                                Timber.d("======SELECTED====== %s",
+                                        selectedCurrency1.toString());
                                 dialogInterface.dismiss();
                             })
                     .setNeutralButton("cancel", (dialogInterface, i) -> dialogInterface.cancel())
                     .show();
         });
+    }
+
+    private void updateTextExchangeInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(selectedCurrency1.scale).append(" ");
+        String displayLanguage = Locale.getDefault().getDisplayLanguage();
+        if (displayLanguage.toLowerCase().contains("ru")) {
+            sb.append(getProperRussianName());
+        } else {
+            sb.append(selectedCurrency1.abbreviation);
+        }
+        sb.append(" = ");
+        binding.textExchangeInfo.setText(sb.toString());
+        System.out.println();
+    }
+
+    private String getProperRussianName() {
+        return "RUS";
     }
 
     @Override

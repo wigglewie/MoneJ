@@ -59,7 +59,7 @@ public class ConverterFragment extends Fragment {
                 AppCompatResources.getDrawable(getContext(),
                         selectedCurrency1.icon));
         binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
-
+        updateTextExchangeInfo();
         initField1();
 
         return binding.getRoot();
@@ -100,6 +100,8 @@ public class ConverterFragment extends Fragment {
             sb.append(selectedCurrency1.abbreviation);
         }
         sb.append(" = ");
+        sb.append("Currency2.rate").append(" ");
+        sb.append("Currency2.abbreviation");
         binding.textExchangeInfo.setText(sb.toString());
         System.out.println();
     }

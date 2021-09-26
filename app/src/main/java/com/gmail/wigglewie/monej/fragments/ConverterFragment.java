@@ -2,16 +2,19 @@ package com.gmail.wigglewie.monej.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.os.ConfigurationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.gmail.wigglewie.monej.Currency;
 import com.gmail.wigglewie.monej.CurrencyRate;
+import com.gmail.wigglewie.monej.GrammarLocaleRu;
 import com.gmail.wigglewie.monej.databinding.FragmentConverterBinding;
 
 import java.util.ArrayList;
@@ -30,6 +33,10 @@ public class ConverterFragment extends Fragment {
     private Currency selectedCurrency1;
 
     private Currency selectedCurrency2;
+
+    private double currencyValue1;
+
+    private double currencyValue2;
 
     public ConverterFragment() {
     }
@@ -52,7 +59,7 @@ public class ConverterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         binding = FragmentConverterBinding.inflate(inflater, container, false);
         selectedCurrency1 = Currency.BELARUS;
         binding.iconCountry1.setImageDrawable(
@@ -61,6 +68,11 @@ public class ConverterFragment extends Fragment {
         binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
         updateTextExchangeInfo();
         initField1();
+        binding.btnSwapCurrencies.setOnClickListener(view -> {
+            String string =
+                    getContext().getResources().getString(GrammarLocaleRu.USD.getNaming(12));
+            System.out.println();
+        });
 
         return binding.getRoot();
     }
@@ -88,6 +100,23 @@ public class ConverterFragment extends Fragment {
                     .setNeutralButton("cancel", (dialogInterface, i) -> dialogInterface.cancel())
                     .show();
         });
+        binding.editTextCurrencyEnter1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                //TODO calculations according to currency rate
+                currencyValue1 = Double.parseDouble(charSequence.toString());
+                System.out.println();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
     }
 
     private void updateTextExchangeInfo() {
@@ -107,7 +136,7 @@ public class ConverterFragment extends Fragment {
     }
 
     private String getProperRussianName() {
-        return "RUS";
+        return getContext().getResources().getString(GrammarLocaleRu.valueOf(selectedCurrency1.abbreviation).getNaming(selectedCurrency1.scale));
     }
 
     @Override

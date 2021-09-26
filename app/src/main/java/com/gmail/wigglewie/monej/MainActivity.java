@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.gmail.wigglewie.monej.fragments.ConverterFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
@@ -31,6 +29,25 @@ public class MainActivity extends AppCompatActivity {
     private void getParsedData() {
         //TODO implement service
         currencyList = new ArrayList<>();
+        loadDataIndependently();
+        currencyList.forEach(currencyRate -> {
+            Currency currency = Currency.findByAbbreviation(currencyRate.abbreviation);
+            currency.cur_id = currencyRate.cur_id;
+            currency.date = currencyRate.date;
+            currency.scale = currencyRate.scale;
+            currency.name_rus = currencyRate.name_rus;
+            currency.rate = currencyRate.rate;
+        });
+        showFragmentWithLoadedData();
+    }
+
+    private void showFragmentWithLoadedData() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, ConverterFragment.newInstance(currencyList))
+                .commit();
+    }
+
+    private void loadDataIndependently() {
         try {
             currencyList.add(new CurrencyRate(
                     456,
@@ -66,23 +83,8 @@ public class MainActivity extends AppCompatActivity {
                     2.2));
 
         } catch (Exception e) {
-            System.out.println(e.toString());
+            Timber.d("===== FAKE LOADED ===== : %s", currencyList.toString());
         }
-        currencyList.forEach(currencyRate -> {
-            Currency currency = Currency.findByAbbreviation(currencyRate.abbreviation);
-            currency.cur_id = currencyRate.cur_id;
-            currency.date = currencyRate.date;
-            currency.scale = currencyRate.scale;
-            currency.name_rus = currencyRate.name_rus;
-            currency.rate = currencyRate.rate;
-        });
-        showFragmentWithLoadedData();
-    }
-
-    private void showFragmentWithLoadedData() {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, ConverterFragment.newInstance(currencyList))
-                .commit();
     }
 
 }

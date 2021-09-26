@@ -6,6 +6,19 @@
     <string name="abbreviation_RUS">RUS</string>
     <string name="abbreviation_USD">USD</string>
     <string name="abbreviation_EUR">EUR</string>
-    <!--Others-->
+    <!--    Others-->
     <string name="edit_text_currency_input_hint">0.0</string>
+    <!--    Currency namings-->
+    <string name="byn_currency_naming_single">Белорусский рубль</string>
+    <string name="byn_currency_naming_up_to_four">Белорусских рубля</string>
+    <string name="byn_currency_naming_multiply">Белоруссих рублей</string>
+    <string name="rub_currency_naming_single">Российский рубль</string>
+    <string name="rub_currency_naming_up_to_four">Российских рубля</string>
+    <string name="rub_currency_naming_multiply">Российских рублей</string>
+    <string name="usd_currency_naming_single">Доллар США</string>
+    <string name="usd_currency_naming_up_to_four">Доллара США</string>
+    <string name="usd_currency_naming_multiply">Долларов США</string>
+    <string name="eur_currency_naming_single">Евро</string>
+    <string name="eur_currency_naming_up_to_four">Евро</string>
+    <string name="eur_currency_naming_multiply">Евро</string>
 </resources>

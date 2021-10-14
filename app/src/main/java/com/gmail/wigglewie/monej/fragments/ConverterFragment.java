@@ -7,15 +7,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
-import com.gmail.wigglewie.monej.Currency;
-import com.gmail.wigglewie.monej.CurrencyRate;
 import com.gmail.wigglewie.monej.GrammarLocaleRu;
+import com.gmail.wigglewie.monej.data.Currency;
+import com.gmail.wigglewie.monej.data.CurrencyViewModel;
 import com.gmail.wigglewie.monej.databinding.FragmentConverterBinding;
+import com.gmail.wigglewie.monej.service.impl.CurrencyCalculateService;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -26,7 +27,7 @@ public class ConverterFragment extends Fragment {
 
     private static final String ARG_PARAM_LIST = "paramList";
 
-    private ArrayList<CurrencyRate> mList;
+    private ArrayList<Currency> currencyValuesList;
 
     private FragmentConverterBinding binding;
 
@@ -38,46 +39,48 @@ public class ConverterFragment extends Fragment {
 
     private double currencyValue2;
 
+    private CurrencyCalculateService currencyCalculateService;
+
+    private CurrencyViewModel model;
+
+    private double exchangeRate;
+
     public ConverterFragment() {
     }
 
-    public static ConverterFragment newInstance(ArrayList<CurrencyRate> listCurrency) {
-        ConverterFragment fragment = new ConverterFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM_LIST, listCurrency);
-        fragment.setArguments(args);
-        return fragment;
+    public static ConverterFragment newInstance() {
+        return new ConverterFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mList = (ArrayList<CurrencyRate>) getArguments().getSerializable(ARG_PARAM_LIST);
-        }
+        currencyCalculateService = new CurrencyCalculateService();
+        CurrencyViewModel instance = CurrencyViewModel.getInstance();
+        currencyValuesList = instance.getCurrencyValue().getValue();
+        System.out.println();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentConverterBinding.inflate(inflater, container, false);
         selectedCurrency1 = Currency.BELARUS;
-        binding.iconCountry1.setImageDrawable(
-                AppCompatResources.getDrawable(getContext(),
-                        selectedCurrency1.icon));
-        binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
-        updateTextExchangeInfo();
-        initField1();
+        selectedCurrency2 = Currency.USA;
+        updateView();
+        initFields();
         binding.btnSwapCurrencies.setOnClickListener(view -> {
-            String string =
-                    getContext().getResources().getString(GrammarLocaleRu.USD.getNaming(12));
-            System.out.println();
+            Currency temp = selectedCurrency1;
+            selectedCurrency1 = selectedCurrency2;
+            selectedCurrency2 = temp;
+            updateView();
         });
 
         return binding.getRoot();
     }
 
-    private void initField1() {
+    private void initFields() {
+        exchangeRate = 0;
         binding.iconCountry1.setOnClickListener(view -> {
             AlertDialog.Builder materialAlertDialogBuilder = new AlertDialog.Builder(getContext());
             materialAlertDialogBuilder
@@ -88,11 +91,11 @@ public class ConverterFragment extends Fragment {
                                 selectedCurrency1 = Currency.findByIndex(position);
                                 binding.iconCountry1.setImageDrawable(
                                         AppCompatResources
-                                                .getDrawable(getContext(),
+                                                .getDrawable(requireContext(),
                                                         selectedCurrency1.icon));
                                 binding.textAbbreviation1
                                         .setText(selectedCurrency1.abbreviation);
-                                updateTextExchangeInfo();
+                                updateView();
                                 Timber.d("======SELECTED====== %s",
                                         selectedCurrency1.toString());
                                 dialogInterface.dismiss();
@@ -108,8 +111,13 @@ public class ConverterFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 //TODO calculations according to currency rate
-                currencyValue1 = Double.parseDouble(charSequence.toString());
-                System.out.println();
+                if (!charSequence.toString().isEmpty()) {
+                    currencyValue1 = Double.parseDouble(charSequence.toString());
+                    currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
+                    updateView();
+                } else {
+                    System.out.println();
+                }
             }
 
             @Override
@@ -117,26 +125,82 @@ public class ConverterFragment extends Fragment {
             }
         });
 
+        binding.iconCountry2.setOnClickListener(view -> {
+            AlertDialog.Builder materialAlertDialogBuilder = new AlertDialog.Builder(getContext());
+            materialAlertDialogBuilder
+                    .setTitle("Choose currency")
+                    .setSingleChoiceItems(Currency.getAbbreviationsArray(),
+                            selectedCurrency2.ordinal(),
+                            (dialogInterface, position) -> {
+                                selectedCurrency2 = Currency.findByIndex(position);
+                                binding.iconCountry2.setImageDrawable(
+                                        AppCompatResources
+                                                .getDrawable(requireContext(),
+                                                        selectedCurrency2.icon));
+                                binding.textAbbreviation2
+                                        .setText(selectedCurrency2.abbreviation);
+                                updateView();
+                                Timber.d("======SELECTED====== %s",
+                                        selectedCurrency2.toString());
+                                dialogInterface.dismiss();
+                            })
+                    .setNeutralButton("cancel", (dialogInterface, i) -> dialogInterface.cancel())
+                    .show();
+        });
+        binding.editTextCurrencyEnter2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                //TODO calculations according to currency rate
+                if (!charSequence.toString().isEmpty()) {
+                    currencyValue2 = Double.parseDouble(charSequence.toString());
+                    currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
+                    updateView();
+                } else {
+                    System.out.println();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
-    private void updateTextExchangeInfo() {
+    private void updateView() {
+        binding.iconCountry1.setImageDrawable(
+                AppCompatResources.getDrawable(getContext(),
+                        selectedCurrency1.icon));
+        binding.iconCountry2.setImageDrawable(
+                AppCompatResources.getDrawable(getContext(), selectedCurrency2.icon));
+        binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
+        binding.textAbbreviation2.setText(selectedCurrency2.abbreviation);
+
         StringBuilder sb = new StringBuilder();
-        sb.append(selectedCurrency1.scale).append(" ");
+        sb.append("1").append(" ");
         String displayLanguage = Locale.getDefault().getDisplayLanguage();
         if (displayLanguage.toLowerCase().contains("ru")) {
-            sb.append(getProperRussianName());
+            sb.append(getProperRussianName(selectedCurrency1));
         } else {
             sb.append(selectedCurrency1.abbreviation);
         }
         sb.append(" = ");
-        sb.append("Currency2.rate").append(" ");
-        sb.append("Currency2.abbreviation");
+        exchangeRate = currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
+        sb.append(exchangeRate).append(" ");
+        displayLanguage = Locale.getDefault().getDisplayLanguage();
+        if (displayLanguage.toLowerCase().contains("ru")) {
+            sb.append(getProperRussianName(selectedCurrency2));
+        } else {
+            sb.append(selectedCurrency2.abbreviation);
+        }
         binding.textExchangeInfo.setText(sb.toString());
-        System.out.println();
     }
 
-    private String getProperRussianName() {
-        return getContext().getResources().getString(GrammarLocaleRu.valueOf(selectedCurrency1.abbreviation).getNaming(selectedCurrency1.scale));
+    private String getProperRussianName(Currency currency) {
+        return requireContext().getResources().getString(GrammarLocaleRu.valueOf(currency.abbreviation).getNaming(selectedCurrency1.scale));
     }
 
     @Override

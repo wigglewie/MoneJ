@@ -1,87 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ConverterFragment">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.ConverterFragment">
 
     <RelativeLayout
-        android:id="@+id/layoutCurrencyEnter1"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_marginTop="60dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextCurrencyEnter1"
-            android:layout_width="match_parent"
+            android:id="@+id/layoutCurrencyEnter1"
+            android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:maxLength="9"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="10"
-            android:gravity="center_vertical"
-            android:hint="@string/edit_text_currency_input_hint"
-            android:inputType="numberDecimal"
-            android:paddingStart="20dp"
-            android:paddingEnd="10dp"
-            android:textSize="20sp"
+            android:layout_marginTop="60dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCurrencyEnter1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:maxLength="9"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/edit_text_border"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="@string/edit_text_currency_input_hint"
+                android:inputType="numberDecimal"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iconCountry1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="78dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_flag_eu" />
+                android:id="@+id/iconCountry1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="78dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_flag_eu" />
 
         <TextView
-            android:id="@+id/textAbbreviation1"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
-            android:layout_alignEnd="@+id/editTextCurrencyEnter1"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="9dp"
-            android:gravity="center"
-            android:text="@string/abbreviation_BYN"
-            android:textSize="18sp" />
+                android:id="@+id/textAbbreviation1"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_alignEnd="@+id/editTextCurrencyEnter1"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="9dp"
+                android:gravity="center"
+                android:text="@string/abbreviation_BYN"
+                android:textSize="18sp" />
 
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/btnSwapCurrencies"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        android:background="@null"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_swap_vert_48"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutCurrencyEnter1" />
+            android:id="@+id/btnSwapCurrencies"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_swap_vert_48"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutCurrencyEnter1" />
 
     <TextView
-        android:id="@+id/textExchangeInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="1 Доллар США = 2.4 Белорусских рубря"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSwapCurrencies"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnSwapCurrencies" />
+            android:id="@+id/textExchangeInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="1 Доллар США = 2.4 Белорусских рубря"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnSwapCurrencies"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnSwapCurrencies" />
+
+    <RelativeLayout
+            android:id="@+id/layoutCurrencyEnter2"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSwapCurrencies">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCurrencyEnter2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:maxLength="9"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/edit_text_border"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="@string/edit_text_currency_input_hint"
+                android:inputType="numberDecimal"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+                android:id="@+id/iconCountry2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="78dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_flag_eu" />
+
+        <TextView
+                android:id="@+id/textAbbreviation2"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_alignEnd="@+id/editTextCurrencyEnter2"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="9dp"
+                android:gravity="center"
+                android:text="@string/abbreviation_BYN"
+                android:textSize="18sp" />
+
+    </RelativeLayout>
 
 
     <!--    <com.google.android.material.textfield.TextInputLayout-->

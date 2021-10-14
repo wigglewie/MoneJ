@@ -1,4 +1,6 @@
-package com.gmail.wigglewie.monej;
+package com.gmail.wigglewie.monej.data;
+
+import com.gmail.wigglewie.monej.R;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,13 +17,13 @@ public enum Currency {
 
     public int icon;
 
-    public int cur_id;
+    public int curId;
 
     public Date date;
 
     public int scale;
 
-    public String name_rus;
+    public String nameRus;
 
     public double rate;
 
@@ -58,10 +60,14 @@ public enum Currency {
 
     @Override
     public String toString() {
-        return "CurrencyItem{" +
+        return "Currency{" +
                 "abbreviation='" + abbreviation + '\'' +
                 ", icon=" + icon +
-                ", ordinal=" + ordinal() +
+                ", curId=" + curId +
+                ", date=" + date +
+                ", scale=" + scale +
+                ", nameRus='" + nameRus + '\'' +
+                ", rate=" + rate +
                 '}';
     }
 

@@ -18,14 +18,14 @@ import com.gmail.wigglewie.monej.data.CurrencyViewModel;
 import com.gmail.wigglewie.monej.databinding.FragmentConverterBinding;
 import com.gmail.wigglewie.monej.service.impl.CurrencyCalculateService;
 
+import org.apache.commons.math3.util.Precision;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import timber.log.Timber;
 
 public class ConverterFragment extends Fragment {
-
-    private static final String ARG_PARAM_LIST = "paramList";
 
     private ArrayList<Currency> currencyValuesList;
 
@@ -39,11 +39,13 @@ public class ConverterFragment extends Fragment {
 
     private double currencyValue2;
 
-    private CurrencyCalculateService currencyCalculateService;
+    private CurrencyCalculateService calculateService;
 
     private CurrencyViewModel model;
 
     private double exchangeRate;
+
+    private boolean isNeedUpdateView;
 
     public ConverterFragment() {
     }
@@ -55,10 +57,10 @@ public class ConverterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currencyCalculateService = new CurrencyCalculateService();
+        calculateService = new CurrencyCalculateService();
         CurrencyViewModel instance = CurrencyViewModel.getInstance();
         currencyValuesList = instance.getCurrencyValue().getValue();
-        System.out.println();
+        isNeedUpdateView = true;
     }
 
     @Override
@@ -67,13 +69,24 @@ public class ConverterFragment extends Fragment {
         binding = FragmentConverterBinding.inflate(inflater, container, false);
         selectedCurrency1 = Currency.BELARUS;
         selectedCurrency2 = Currency.USA;
-        updateView();
+        updateTextExchangeInfo();
         initFields();
         binding.btnSwapCurrencies.setOnClickListener(view -> {
             Currency temp = selectedCurrency1;
             selectedCurrency1 = selectedCurrency2;
             selectedCurrency2 = temp;
-            updateView();
+            updateTextExchangeInfo();
+            isNeedUpdateView = false;
+            if (Precision.round(currencyValue1 * exchangeRate, 2) != 0 ||
+                    Precision.round(currencyValue2 * exchangeRate, 2) != 0) {
+                if (selectedCurrency1.equals(Currency.RUSSIA)) {
+                    currencyValue2 = Precision.round(currencyValue1 * exchangeRate / Currency.RUSSIA.scale, 2);
+                } else {
+                    currencyValue2 = Precision.round(currencyValue1 * exchangeRate, 2);
+                }
+                binding.editTextCurrencyEnter2.setText(String.valueOf(currencyValue2));
+            }
+            isNeedUpdateView = true;
         });
 
         return binding.getRoot();
@@ -95,7 +108,13 @@ public class ConverterFragment extends Fragment {
                                                         selectedCurrency1.icon));
                                 binding.textAbbreviation1
                                         .setText(selectedCurrency1.abbreviation);
-                                updateView();
+                                updateTextExchangeInfo();
+                                isNeedUpdateView = false;
+                                if (Precision.round(currencyValue1 / exchangeRate, 2) != 0) {
+                                    currencyValue2 = Precision.round(currencyValue1 * exchangeRate / selectedCurrency1.scale, 2);
+                                    binding.editTextCurrencyEnter2.setText(String.valueOf(currencyValue2));
+                                    isNeedUpdateView = true;
+                                }
                                 Timber.d("======SELECTED====== %s",
                                         selectedCurrency1.toString());
                                 dialogInterface.dismiss();
@@ -110,13 +129,20 @@ public class ConverterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                //TODO calculations according to currency rate
-                if (!charSequence.toString().isEmpty()) {
-                    currencyValue1 = Double.parseDouble(charSequence.toString());
-                    currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
-                    updateView();
-                } else {
-                    System.out.println();
+                if (isNeedUpdateView) {
+                    if (!charSequence.toString().isEmpty()) {
+                        currencyValue1 = Double.parseDouble(charSequence.toString());
+                        updateTextExchangeInfo();
+                        isNeedUpdateView = false;
+                        currencyValue2 = Precision.round(currencyValue1 * exchangeRate, 2);
+                        binding.editTextCurrencyEnter2.setText(String.valueOf(currencyValue2));
+                    } else {
+                        isNeedUpdateView = false;
+                        binding.editTextCurrencyEnter2.setText("");
+                        currencyValue1 = 0;
+                        currencyValue2 = 0;
+                    }
+                    isNeedUpdateView = true;
                 }
             }
 
@@ -139,7 +165,13 @@ public class ConverterFragment extends Fragment {
                                                         selectedCurrency2.icon));
                                 binding.textAbbreviation2
                                         .setText(selectedCurrency2.abbreviation);
-                                updateView();
+                                updateTextExchangeInfo();
+                                isNeedUpdateView = false;
+                                if (Precision.round(currencyValue1 / exchangeRate, 2) != 0) {
+                                    currencyValue2 = Precision.round(currencyValue1 * exchangeRate / selectedCurrency1.scale, 2);
+                                    binding.editTextCurrencyEnter2.setText(String.valueOf(currencyValue2));
+                                    isNeedUpdateView = true;
+                                }
                                 Timber.d("======SELECTED====== %s",
                                         selectedCurrency2.toString());
                                 dialogInterface.dismiss();
@@ -154,13 +186,20 @@ public class ConverterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                //TODO calculations according to currency rate
-                if (!charSequence.toString().isEmpty()) {
-                    currencyValue2 = Double.parseDouble(charSequence.toString());
-                    currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
-                    updateView();
-                } else {
-                    System.out.println();
+                if (isNeedUpdateView) {
+                    if (!charSequence.toString().isEmpty()) {
+                        currencyValue2 = Double.parseDouble(charSequence.toString());
+                        updateTextExchangeInfo();
+                        isNeedUpdateView = false;
+                        currencyValue1 = Precision.round(currencyValue2 / exchangeRate, 2);
+                        binding.editTextCurrencyEnter1.setText(String.valueOf(currencyValue1));
+                    } else {
+                        isNeedUpdateView = false;
+                        binding.editTextCurrencyEnter1.setText("");
+                        currencyValue1 = 0;
+                        currencyValue2 = 0;
+                    }
+                    isNeedUpdateView = true;
                 }
             }
 
@@ -170,17 +209,18 @@ public class ConverterFragment extends Fragment {
         });
     }
 
-    private void updateView() {
+    private void updateTextExchangeInfo() {
+        exchangeRate = calculateService.calculateRate(selectedCurrency1, selectedCurrency2);
+
         binding.iconCountry1.setImageDrawable(
-                AppCompatResources.getDrawable(getContext(),
-                        selectedCurrency1.icon));
+                AppCompatResources.getDrawable(requireContext(), selectedCurrency1.icon));
         binding.iconCountry2.setImageDrawable(
-                AppCompatResources.getDrawable(getContext(), selectedCurrency2.icon));
+                AppCompatResources.getDrawable(requireContext(), selectedCurrency2.icon));
         binding.textAbbreviation1.setText(selectedCurrency1.abbreviation);
         binding.textAbbreviation2.setText(selectedCurrency2.abbreviation);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("1").append(" ");
+        sb.append(selectedCurrency1.scale).append(" ");
         String displayLanguage = Locale.getDefault().getDisplayLanguage();
         if (displayLanguage.toLowerCase().contains("ru")) {
             sb.append(getProperRussianName(selectedCurrency1));
@@ -188,7 +228,6 @@ public class ConverterFragment extends Fragment {
             sb.append(selectedCurrency1.abbreviation);
         }
         sb.append(" = ");
-        exchangeRate = currencyCalculateService.calculateRate(selectedCurrency1, selectedCurrency2);
         sb.append(exchangeRate).append(" ");
         displayLanguage = Locale.getDefault().getDisplayLanguage();
         if (displayLanguage.toLowerCase().contains("ru")) {
@@ -200,7 +239,7 @@ public class ConverterFragment extends Fragment {
     }
 
     private String getProperRussianName(Currency currency) {
-        return requireContext().getResources().getString(GrammarLocaleRu.valueOf(currency.abbreviation).getNaming(selectedCurrency1.scale));
+        return requireContext().getResources().getString(GrammarLocaleRu.valueOf(currency.abbreviation).getNaming(currency.scale));
     }
 
     @Override
